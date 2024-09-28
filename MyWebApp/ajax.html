@@ -1,0 +1,53 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<button>SHOW PRODUCTS</button>
+
+<div></div>
+
+<script>
+    $(document).ready(function(){
+        $("button").click(function(){
+           
+            //$.ajax ----  POST , GET
+
+            var destPath = 'http://iitdac.met.edu:8001/MyWebApp/api/products/get';
+
+            $.ajax({
+                type:"GET",
+                url:destPath,
+                success:function(res){
+                    console.log('Response From API');
+                    console.log(res);
+                   
+                    if(res.length > 0){
+                        var content=`<table>
+                            <thead>
+                                <tr>
+                                    <th>PNO</th>
+                                     <th>PRICE</th>
+                                    <th>STOCK</th>
+                                    
+                                    </tr>
+                                </thead>`
+                        $.each(res , function(i,obj){
+                            // console.log(obj);
+                            console.log(obj.pno);
+                            content+= `<tr>
+                                <td>${obj.pno}</td>
+                                <td>${obj.price}</td>
+                                <td>${obj.stock}</td>
+                                </tr>`
+                        });
+			
+
+                        $('div').html(content);
+                    }
+                },
+                error:function(err){
+                    console.log('Error From API');
+                    console.log(err);
+                }
+            });
+        });
+    });
+</script>

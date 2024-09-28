@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>ModernWebApp</title>
+    </head>
+    <body>
+        <h1>Welcome Sales Agent</h1>
+	    <hr/>
+        <form>
+            <p>
+                <b>PRICE</b><br/>
+                <input type="text" id="price" required="required"/>
+                
+            </p>
+            <p>
+                <b>STOCK</b><br/>
+                <input type="number" id="stock" required="required"/>
+            </p>
+            
+	    	<input type="button" id="productButton" value="product"/>
+        </form>
+        <p>
+            <span id="statusOutput"></span><br/>
+        </p>
+		<div id="productsView" style="display:none">
+	    	<table border="1" id="productsTable">
+				<thead>
+		    		<tr>
+						<th>Product No</th>
+						<th>Price</th>
+						<th>Stock</th>
+		    		</tr>
+	      		</thead>
+				<tbody>
+				</tbody>
+	    	</table>
+		</div>
+        <script>
+
+            
+            let priceInput = document.getElementById("price");
+            let stockInput = document.getElementById("stock");
+            let statusOutput = document.getElementById("statusOutput");
+	    	let productsTable = document.getElementById("productsTable");
+	    	let productsView = document.getElementById("productsView");
+
+	    	function clearProducts(){
+				productsView.style.display = "none";
+				while(productsTable.rows.length > 1) 
+					productsTable.deleteRow(1);
+	    	}
+
+	    	document.getElementById("productButton").onclick = async function(){
+	   			clearProducts();
+				statusOutput.innerText = await doPostProduct( priceInput.value, stockInput.value);
+	    	};
+
+            document.getElementById("invoiceButton").onclick = async function(){
+				clearOrders();
+				let result = await doGetProducts();
+				if(typeof result === 'string')
+		    		statusOutput.innerText = result;
+                else{
+                    statusOutput.innerText = "Orders of this Customer ";
+		    		for(const entry of result) {
+		    			let row = ordersTable.insertRow();
+		    		
+		    			row.insertCell().innerText = entry.price;
+		    			row.insertCell().innerText = entry.stock;
+		    		}
+		    		ordersView.style.display = "block";
+				}
+			};
+
+        </script>
+		<script src="salesui.js"></script>
+    </body>
+</html>
+
